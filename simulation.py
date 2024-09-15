@@ -191,7 +191,7 @@ class TradingEngine:
             self.totalValueHistory.append(self.totalPNL)
             # Update simluator information
             self.positions = desiredPositions
-            
+
 
     def plot_returns(self):
         # Set figure size
@@ -286,4 +286,30 @@ if __name__ == "__main__":
     algorithmInstance = Algorithm(engine.positions)
     engine.run_algorithms(algorithmInstance)
     engine.plot_returns()
+    plt.clf()
+    x1, x2 = algorithmInstance.read_csv("data/Coffee_price_history.csv")
+    y1, y2 = algorithmInstance.read_csv("data/Coffee Beans_price_history.csv")
+    z1, z2 = algorithmInstance.read_csv("data/Milk_price_history.csv")
+
+    m2 = np.array(x2)
+    m2 = m2/np.max(m2)
+    b2 = np.array(y2)
+    b2 = b2 / np.max(b2)
+    c2 = np.array(z2)
+    c2 = c2 / np.max(c2)
+
+    # plt.plot(x1, c2, color="red", label="Coffee")
+    plt.plot(y1, b2, color="blue", label="Beans")
+    plt.plot(z1, m2, color="green", label="Milk")
+    plt.show()
+
+    for f in range(50):
+        y22 = [y2[i+f] - y2[i] for i in range(len(y2)-f)]
+        z22 = [z2[i+f] - z2[i] for i in range(len(z2)-f)]
+
+        c = 0
+        for i in range(len(z22)-1):
+            if (y22[i+1] > 0 and z22[i] > 0) or (y22[i+1] < 0 and z22[i] < 0):
+                c += 1
+        print(c)
 

@@ -286,7 +286,8 @@ if __name__ == "__main__":
     algorithmInstance = Algorithm(engine.positions)
     engine.run_algorithms(algorithmInstance)
     engine.plot_returns()
-    plt.clf()
+
+    """plt.clf()
     x1, x2 = algorithmInstance.read_csv("data/Coffee_price_history.csv")
     y1, y2 = algorithmInstance.read_csv("data/Coffee Beans_price_history.csv")
     z1, z2 = algorithmInstance.read_csv("data/Milk_price_history.csv")
@@ -311,5 +312,5 @@ if __name__ == "__main__":
         for i in range(len(z22)-1):
             if (y22[i+1] > 0 and z22[i] > 0) or (y22[i+1] < 0 and z22[i] < 0):
                 c += 1
-        print(c)
+        print(c)"""
 

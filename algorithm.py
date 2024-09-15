@@ -1,8 +1,6 @@
-import numpy as np
-from pandas import read_csv
+from matplotlib import pyplot as plt
 
 
-# Custom trading Algorithm
 class Algorithm():
 
     ########################################################
@@ -13,8 +11,8 @@ class Algorithm():
         # Initialise data stores:
         # Historical data of all instruments
         self.data = {}
-        self.milk_mult = 75/2000 * 6
-        self.bean_mult = 7/2000
+        self.milk_mult = 75 / 2000 * 6
+        self.bean_mult = 7 / 2000
         self.c = 0
         # Initialise position limits
         self.positionLimits = {}
@@ -31,6 +29,7 @@ class Algorithm():
     def get_current_price(self, instrument):
         # return most recent price
         return self.data[instrument][-1]
+
     ########################################################
 
     # RETURN DESIRED POSITIONS IN DICT FORM
@@ -39,7 +38,7 @@ class Algorithm():
         currentPositions = self.positions
         # Get position limits
         positionLimits = self.positionLimits
-        
+
         # Declare a store for desired positions
         desiredPositions = {}
         # Loop through all the instruments you can take positions on.
@@ -47,21 +46,9 @@ class Algorithm():
             # For each instrument initilise desired position to zero
             desiredPositions[instrument] = 0
 
-        # IMPLEMENT CODE HERE TO DECIDE WHAT POSITIONS YOU WANT 
+        # IMPLEMENT CODE HERE TO DECIDE WHAT POSITIONS YOU WANT
         #######################################################################
         # Buy thrifted jeans maximum amount
-        """if self.last_coffee_price is None:
-            self.last_coffee_price = self.get_current_price("Coffee")
-        next_coffee_price = self.get_next_expected_coffee_price(self.get_current_price("Milk"), self.get_current_price("Coffee Beans"))
-        print(f"{next_coffee_price=}")
-        if next_coffee_price - self.last_coffee_price > 0:
-            desiredPositions["Coffee"] = positionLimits["Coffee"]
-            self.c += 1
-        else:
-            desiredPositions["Coffee"] = -positionLimits["Coffee"]
-            self.c -= 1
-        print(self.c)
-        self.last_coffee_price = next_coffee_price"""
 
         """current_thrifted = self.get_current_price("Thrifted Jeans")
         next_expected_thrifted_price = self.get_expected_thrifted_price(self.day + 1)
@@ -72,16 +59,15 @@ class Algorithm():
         else:
             desiredPositions["Thrifted Jeans"] = -positionLimits["Thrifted Jeans"]"""
 
-        #self.get_fintech_positions(desiredPositions, positionLimits)
-
-
+        #self.get_coffee_positions(desiredPositions, positionLimits, ratio="1:3")
+        # self.get_fintech_positions(desiredPositions, positionLimits)
 
         #######################################################################
         # Return the desired positions
         return desiredPositions
 
     def avg(self, l):
-        return sum(l)/len(l)
+        return sum(l) / len(l)
 
     def read_csv(self, csv, val_type=float):
         with open(csv) as ft:
@@ -103,8 +89,11 @@ class Algorithm():
         else:
             return 0.09003603892119379 * day + 69.80511709601876
 
-    def get_next_expected_coffee_price(self, milk_price, bean_price):
-        return self.milk_mult * milk_price * 6 + self.bean_mult * bean_price
+    def get_next_expected_coffee_price(self, milk_price, bean_price, ratio):
+        """ Ratio is Milk:Beans"""
+        m = int(ratio.split(":")[0])
+        b = int(ratio.split(":")[1])
+        return self.milk_mult * milk_price * m + self.bean_mult * bean_price * b
 
     def update_fintech_recent_prices(self, price):
         for i, val in enumerate(self.fintech_recent_prices[1:]):
@@ -138,6 +127,31 @@ class Algorithm():
             desiredPositions["Fintech Token"] = -positionLimits["Fintech Token"]
             print("Selling")
         else:
-            #TODO Implement Tom's Buy High Sell Low here for the average holding price
+            # TODO Implement Tom's Buy High Sell Low here for the average holding price
             desiredPositions["Fintech Token"] = 0
             print("Holding")
+
+    def get_coffee_positions(self, desiredPositions, positionLimits, ratio):
+        if self.last_coffee_price is None:
+            self.last_coffee_price = self.get_current_price("Coffee")
+        next_coffee_price = self.get_next_expected_coffee_price(self.get_current_price("Milk"),
+                                                                self.get_current_price("Coffee Beans"),
+                                                                ratio)
+        print(f"{next_coffee_price=}")
+        if next_coffee_price - self.last_coffee_price > 0:
+            desiredPositions["Coffee"] = positionLimits["Coffee"]
+            self.c += 1
+        else:
+            desiredPositions["Coffee"] = -positionLimits["Coffee"]
+            self.c -= 1
+        print(self.c)
+        self.last_coffee_price = next_coffee_price
+
+    def graph_csv(self, csv):
+        x, y = self.read_csv(csv)
+        plt.clf()
+        plt.plot(x, y, label="Fun Drink")
+        plt.show()
+
+a = Algorithm(1)
+a.graph_csv("data/Fun Drink_price_history.csv")

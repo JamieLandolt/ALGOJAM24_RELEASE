@@ -1,7 +1,7 @@
 # Library Imports
 import os
 import pandas as pd
-from algorithm import Algorithm
+from test3 import Algorithm
 import numpy as np
 import matplotlib.pyplot as plt
 from decimal import Decimal, ROUND_HALF_UP

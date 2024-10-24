@@ -11,7 +11,7 @@ class Algorithm():
         # Initialise data stores:
         # Historical data of all instruments
         self.data = {}
-        self.milk_mult = 75 / 2000 * 6
+        self.milk_mult = 75 / 2000
         self.bean_mult = 7 / 2000
         self.c = 0
         # Initialise position limits
@@ -59,7 +59,7 @@ class Algorithm():
         else:
             desiredPositions["Thrifted Jeans"] = -positionLimits["Thrifted Jeans"]"""
 
-        #self.get_coffee_positions(desiredPositions, positionLimits, ratio="1:3")
+        self.get_coffee_positions(desiredPositions, positionLimits, ratio="5:3")
         # self.get_fintech_positions(desiredPositions, positionLimits)
 
         #######################################################################
